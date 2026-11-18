@@ -1,7 +1,7 @@
-<H3>Enter Name</H3>
-<H3>Enter Register No.</H3>
+<H3>TRISHA PRIYADARSHNI PARIDA</H3>
+<H3>212224230293</H3>
 <H3>Experiment 2</H3>
-<H3>Date</H3>
+<H3>13-11-2026</H3>
 <h1 align =center>Implementation of Exact Inference Method of Bayesian Network</h1>
 
 ## Aim:
@@ -18,8 +18,9 @@ Step 6: Perform exact inference using the defined evidence and query variables.<
 Step 7: Print the results.<br>
 
 ## Program :
-<Type your Code here>
+```python
 
+```
 
 ## Output :
 <Show the results>
