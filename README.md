@@ -19,11 +19,83 @@ Step 7: Print the results.<br>
 
 ## Program :
 ```python
+!pip install pgmpy
+
+# Importing Library
+from pgmpy.models import DiscreteBayesianNetwork
+from pgmpy.inference import VariableElimination
+
+# Defining network structure
+
+alarm_model = DiscreteBayesianNetwork(
+    [
+        ("Burglary", "Alarm"),
+        ("Earthquake", "Alarm"),
+        ("Alarm", "JohnCalls"),
+        ("Alarm", "MaryCalls"),
+    ]
+)
+
+# Defining the parameters using CPT
+from pgmpy.factors.discrete import TabularCPD
+
+cpd_burglary = TabularCPD(
+    variable="Burglary", variable_card=2, values=[[0.999], [0.001]]
+)
+cpd_earthquake = TabularCPD(
+    variable="Earthquake", variable_card=2, values=[[0.998], [0.002]]
+)
+cpd_alarm = TabularCPD(
+    variable="Alarm",
+    variable_card=2,
+    values=[[0.999, 0.71, 0.06, 0.05], [0.001, 0.29, 0.94, 0.95]],
+    evidence=["Burglary", "Earthquake"],
+    evidence_card=[2, 2],
+)
+cpd_johncalls = TabularCPD(
+    variable="JohnCalls",
+    variable_card=2,
+    values=[[0.95, 0.1], [0.05, 0.9]],
+    evidence=["Alarm"],
+    evidence_card=[2],
+)
+cpd_marycalls = TabularCPD(
+    variable="MaryCalls",
+    variable_card=2,
+    values=[[0.99, 0.3], [0.01, 0.7]],
+    evidence=["Alarm"],
+    evidence_card=[2],
+)
+
+# Associating the parameters with the model structure
+alarm_model.add_cpds(
+    cpd_burglary, cpd_earthquake, cpd_alarm, cpd_johncalls, cpd_marycalls
+)
+
+alarm_model.check_model()
+
+inference=VariableElimination(alarm_model)
+
+evidence={"JohnCalls":1,"MaryCalls":0}
+
+query='Burglary'
+
+res=inference.query(variables=[query],evidence=evidence)
+
+print(res)
+
+evidence2={"JohnCalls":1,"MaryCalls":1}
+
+res2=inference.query(variables=[query],evidence=evidence2)
+
+print(res2)
 
 ```
 
 ## Output :
-<Show the results>
+<img width="205" height="100" alt="image" src="https://github.com/user-attachments/assets/a54712e9-9b34-452a-846f-58c61911bd84" />
+
+<img width="200" height="96" alt="image" src="https://github.com/user-attachments/assets/3ebf38c5-2685-445c-9a4c-f71f2b4a593c" />
 
 ## Result :
 Thus, Bayesian Inference was successfully determined using Variable Elimination Method
